@@ -1005,6 +1005,10 @@ export class DocumentParser {
 					result.children.push(this.parseTableRow(c));
 					break;
 
+				case "sdt":
+					result.children.push(...this.parseSdt(c, e => this.parseTable(e).children));
+					break;
+
 				case "tblGrid":
 					result.columns = this.parseTableColumns(c);
 					break;
@@ -1113,6 +1117,10 @@ export class DocumentParser {
 					result.children.push(this.parseTableCell(c));
 					break;
 
+				case "sdt":
+					result.children.push(...this.parseSdt(c, e => this.parseTableRow(e).children));
+					break;
+
 				case "trPr":
 				case "tblPrEx":
 					this.parseTableRowProperties(c, result);
@@ -1167,6 +1175,10 @@ export class DocumentParser {
 
 				case "p":
 					result.children.push(this.parseParagraph(c));
+					break;
+
+				case "sdt":
+					result.children.push(...this.parseSdt(c, e => this.parseBodyElements(e)));
 					break;
 
 				case "tcPr":
