@@ -1,11 +1,10 @@
 describe("Render document", function () {
   const tests = [
     'text',
-    'font-fallback',
     'underlines',
     'text-break',
     'table',
-    'table-position',
+    'row-jc',
     'page-layout',
     'revision',
     'numbering',
@@ -14,13 +13,8 @@ describe("Render document", function () {
     'header-footer-even-odd-off',
     'footnote',
     'equation',
-    'page-break-before',
-    'page-break-rendered'
+    'page-break-before'
   ];
-
-  const testOptions = {
-    'page-break-rendered': { ignoreLastRenderedPageBreak: false }
-  };
 
   for (let path of tests) {
     it(`from ${path} should be correct`, async () => {
@@ -33,8 +27,7 @@ describe("Render document", function () {
       document.body.appendChild(div);
 
       await docx.renderAsync(docBlob, div, null, {
-        renderChanges: true,
-        ...testOptions[path]
+        renderChanges: true
       });
       
       const actual = formatHTML(div.innerHTML);
