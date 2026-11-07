@@ -1233,7 +1233,7 @@ section.${c}>footer { z-index: 1; }
 		let children = this.renderElements(elem.children);
 
 		if (elem.verticalAlign) {
-			children = [this.h({ tagName: elem.verticalAlign, children: this.renderElements(elem.children) })];
+			children = [this.h({ tagName: elem.verticalAlign, children })];
 		}
 
 		const result = this.toHTML(elem, ns.html, "span", children);
