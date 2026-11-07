@@ -1117,7 +1117,7 @@ export class DocumentParser {
 					break;
 
 				case "tblHeader":
-					row.isHeader = xml.boolAttr(c, "val");
+					row.isHeader = xml.boolAttr(c, "val", true);
 					break;
 
 				case "gridBefore":
