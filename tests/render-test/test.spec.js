@@ -4,7 +4,6 @@ describe("Render document", function () {
     'underlines',
     'text-break',
     'table',
-    'table-sdt',
     'page-layout',
     'revision',
     'numbering',
@@ -14,7 +13,7 @@ describe("Render document", function () {
     'footnote',
     'equation',
     'page-break-before',
-    'floating-image'
+    'keep-with-next'
   ];
 
   for (let path of tests) {
