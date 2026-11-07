@@ -1,6 +1,4 @@
 module.exports = (config) => {
-  const isCI = !!process.env.CI;
-
   config.set({
     basePath: '',
     frameworks: ['jasmine'],
@@ -17,13 +15,7 @@ module.exports = (config) => {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: [isCI ? 'ChromeHeadlessCI' : 'Chrome'],
-    customLaunchers: {
-      ChromeHeadlessCI: {
-        base: 'ChromeHeadless',
-        flags: ['--no-sandbox', '--disable-dev-shm-usage']
-      }
-    },
+    browsers: ['Chrome'],
     singleRun: false,
     concurrency: Infinity,
     crossOriginAttribute: false
