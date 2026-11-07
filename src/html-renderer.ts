@@ -1041,7 +1041,22 @@ section.${c}>footer { z-index: 1; }
 			result.classList.add(this.numberingClass(numbering.id, numbering.level));
 		}
 
+		// VML shapes are positioned relative to the column and the paragraph unless they say page or margin
+		if (this.anchorsVmlShape(elem))
+			result.style.position = "relative";
+
 		return result;
+	}
+
+	anchorsVmlShape(elem: OpenXmlElement): boolean {
+		return elem.children?.some(c => {
+			if (c.type == DomType.VmlElement) {
+				const style = (c as VmlElement).cssStyleText ?? "";
+				return /position:\s*absolute/.test(style) && !/position-(horizontal|vertical)-relative:\s*(page|margin)/.test(style);
+			}
+
+			return (c.type == DomType.Run || c.type == DomType.VmlPicture || c.type == DomType.Hyperlink) && this.anchorsVmlShape(c);
+		}) ?? false;
 	}
 
 	renderHyperlink(elem: WmlHyperlink) {
