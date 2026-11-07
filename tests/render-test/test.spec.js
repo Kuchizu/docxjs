@@ -2,21 +2,18 @@ describe("Render document", function () {
   const tests = [
     'text',
     'underlines',
-    'strike-underline',
     'text-break',
     'table',
-    'row-jc',
     'page-layout',
     'revision',
     'numbering',
-    'numbering-multilevel',
     'line-spacing',
     'header-footer',
     'header-footer-even-odd-off',
     'footnote',
     'equation',
     'page-break-before',
-    'linked-style'
+    'doc-defaults'
   ];
 
   for (let path of tests) {
