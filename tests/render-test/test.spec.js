@@ -13,7 +13,7 @@ describe("Render document", function () {
     'footnote',
     'equation',
     'page-break-before',
-    'keep-with-next'
+    'symbol-bullets'
   ];
 
   for (let path of tests) {
