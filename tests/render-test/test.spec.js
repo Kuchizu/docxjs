@@ -13,7 +13,7 @@ describe("Render document", function () {
     'footnote',
     'equation',
     'page-break-before',
-    'hyphenation'
+    'floating-image'
   ];
 
   for (let path of tests) {
