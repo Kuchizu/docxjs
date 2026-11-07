@@ -128,6 +128,7 @@ export interface WmlTable extends OpenXmlElement {
     columns?: WmlTableColumn[];
     cellStyle?: Record<string, string>;
     position?: WmlTablePosition;
+    cellBorders?: WmlTableCellBorders;
 
 	colBandSize?: number;
 	rowBandSize?: number;
@@ -138,6 +139,15 @@ export interface WmlTablePosition {
     y?: string;
     horzAnchor?: string;
     vertAnchor?: string;
+}
+
+export interface WmlTableCellBorders {
+    top?: string;
+    right?: string;
+    bottom?: string;
+    left?: string;
+    insideHorizontal?: string;
+    insideVertical?: string;
 }
 
 export interface WmlTableRow extends OpenXmlElement {
