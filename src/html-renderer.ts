@@ -384,7 +384,8 @@ export class HtmlRenderer {
 			}
 
 			if (this.options.renderFootnotes) {
-				const notes = this.renderNotes(this.currentFootnoteIds, this.footnoteMap);
+				const notes = this.renderNotes(this.currentFootnoteIds, this.footnoteMap) as HTMLElement;
+				notes?.setAttribute?.("data-footnotes", "");
 				notes && pageElement.appendChild(notes);
 			}
 
@@ -1202,7 +1203,9 @@ section.${c}>footer { z-index: 1; }
 
 	renderFootnoteReference(elem: WmlNoteReference) {
 		this.currentFootnoteIds.push(elem.id);
-		return this.h({ tagName: "sup", children: [`${this.currentFootnoteIds.length}`] });
+		const sup = this.h({ tagName: "sup", children: [`${this.currentFootnoteIds.length}`] }) as HTMLElement;
+		sup.setAttribute?.("data-footnote-ref", `${this.currentFootnoteIds.length}`);
+		return sup;
 	}
 
 	renderEndnoteReference(elem: WmlNoteReference) {

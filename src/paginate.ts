@@ -38,15 +38,33 @@ export function splitPage(page: HTMLElement, className: string = "docx"): HTMLEl
 	if (!pageHeight)
 		return null;
 
-	let available = pageHeight - (parseFloat(style.paddingTop) || 0) - (parseFloat(style.paddingBottom) || 0);
+	const space = pageHeight - (parseFloat(style.paddingTop) || 0) - (parseFloat(style.paddingBottom) || 0);
+	const measureLimit = () => {
+		let available = space;
 
-	for (const c of Array.from(page.children)) {
-		if (c !== article)
-			available -= c.getBoundingClientRect().height;  // header and footer
+		for (const c of Array.from(page.children)) {
+			if (c !== article)
+				available -= c.getBoundingClientRect().height;  // header, footer and footnotes
+		}
+
+		return article.getBoundingClientRect().top + available + 0.5;
+	};
+
+	// Footnotes take space only for the references that stay on the page, so settle both together.
+	syncFootnotes(page, article, () => false);
+	let limitY = measureLimit();
+
+	for (let i = 0; i < 5; i++) {
+		syncFootnotes(page, article, ref => ref.getBoundingClientRect().bottom <= limitY);
+		const next = measureLimit();
+
+		if (Math.abs(next - limitY) < 1)
+			break;
+
+		limitY = Math.min(limitY, next);
 	}
 
 	const blocks = Array.from(article.children) as HTMLElement[];
-	const limitY = article.getBoundingClientRect().top + available + 0.5;
 	// Empty paragraphs (such as the one holding a page break) never start a page.
 	const over = blocks.findIndex(b => !isBlank(b) && b.getBoundingClientRect().bottom > limitY);
 
@@ -99,6 +117,7 @@ export function splitPage(page: HTMLElement, className: string = "docx"): HTMLEl
 		nextArticle.appendChild(b);
 
 	page.after(next);
+	syncFootnotes(page, article);
 	return next;
 }
 
@@ -226,6 +245,24 @@ function textPositionAt(p: HTMLElement, y: number): { node: Text, offset: number
 	}
 
 	return null;
+}
+
+/** Shows only the footnotes referenced on the page, keeping their numbers. */
+function syncFootnotes(page: HTMLElement, article: HTMLElement, onPage: (ref: Element) => boolean = () => true) {
+	const notes = Array.from(page.children).find(c => c.hasAttribute("data-footnotes")) as HTMLElement;
+
+	if (!notes)
+		return;
+
+	const refs = new Set(Array.from(article.querySelectorAll("[data-footnote-ref]")).filter(onPage).map(x => x.getAttribute("data-footnote-ref")));
+	const items = Array.from(notes.children) as HTMLLIElement[];
+
+	items.forEach((li, i) => {
+		li.value = i + 1;
+		li.style.display = refs.has(`${i + 1}`) ? "" : "none";
+	});
+
+	notes.style.display = items.some(li => li.style.display !== "none") ? "" : "none";
 }
 
 function isBlank(el: HTMLElement): boolean {
