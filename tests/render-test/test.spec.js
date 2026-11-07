@@ -13,7 +13,7 @@ describe("Render document", function () {
     'footnote',
     'equation',
     'page-break-before',
-    'doc-defaults'
+    'hyphenation'
   ];
 
   for (let path of tests) {
